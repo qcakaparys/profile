@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nguyễn Quốc Cường</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html { font-family: 'Montserrat', sans-serif; height: 100%; width: 100%; overflow-x: hidden; }
+    .background-gif { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://64.media.tumblr.com/6036a91adb5c8b7aeb53f291e70d519b/5a213c0676812594-97/s540x810/d29de88a63404a40b964cfb58d2bc6ccb0df5234.gif') no-repeat center center fixed; background-size: cover; z-index: -1; }
+    .intro-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+    .intro-screen.hidden { opacity: 0; visibility: hidden; transition: opacity 1s ease, visibility 1s ease; }
+    .intro-button { font-size: 16px; padding: 15px 25px; background: transparent; color: white; font-weight: 600; cursor: pointer; border: none; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7); position: relative; overflow: hidden; outline: none; }
+    .intro-button:before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: 0.5s; }
+    .container { width: 100%; max-width: 370px; margin: 20px auto; padding: clamp(12px, 4vw, 20px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.15); text-align: center; color: white; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); display: none; flex-direction: column; overflow-y: auto; max-height: 90vh; -webkit-overflow-scrolling: touch; }
+    .avatar-container { width: clamp(80px, 25vw, 120px); height: clamp(80px, 25vw, 120px); margin: 0 auto 20px; }
+    .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.2); transition: all 0.3s ease; }
+    .avatar:hover { transform: scale(1.05); border-color: rgba(255,255,255,0.5); }
+    h1 { font-size: clamp(18px, 4.5vw, 24px); margin: 0 0 5px; font-weight: 700; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.7); }
+    p.subtitle { color: rgba(255,255,255,0.9); font-size: clamp(12px, 3.5vw, 14px); margin-bottom: 20px; font-weight: 400; text-shadow: 0 2px 4px rgba(0,0,0,0.7); }
+    .section-title { font-weight: 600; font-size: clamp(14px, 4vw, 18px); margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.7); }
+    .grid-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; justify-content: center; margin-bottom: 15px; }
+    .button { background: transparent; border: 1px solid rgba(255,255,255,0.3); padding: 10px 0; border-radius: 50px; font-weight: 500; font-size: clamp(11px, 3vw, 13px); color: white; text-align: center; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center; text-shadow: 0 2px 4px rgba(0,0,0,0.7); outline: none; }
+    .button i { margin-right: 10px; font-size: clamp(14px, 3.5vw, 16px); transition: transform 0.3s ease; }
+    .button:hover i { transform: scale(1.25) translateY(-2px); }
+    .button:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    .button.instagram i { color: #E1306C; }
+    .button.tiktok i { color: #FE2C55; }
+    .button.facebook i { color: #1877F2; }
+    .button.github i { color: #333; }
+    .button.instagram:hover { background-color: rgba(225, 48, 108, 0.2); color: #E1306C; border-color: #E1306C; }
+    .button.tiktok:hover { background-color: rgba(254, 44, 85, 0.2); color: #FE2C55; border-color: #FE2C55; }
+    .button.facebook:hover { background-color: rgba(24, 119, 242, 0.2); color: #1877F2; border-color: #1877F2; }
+    .button.github:hover { background-color: rgba(33, 33, 33, 0.2); color: #333; border-color: #333; }
+    .description-box { background: transparent; color: rgba(255,255,255,0.9); padding: 15px; border-radius: 16px; font-size: clamp(12px,3.5vw,14px); line-height: 1.6; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.2); text-shadow: 0 2px 4px rgba(0,0,0,0.7); text-align: center; }
+    .footer { margin-top: 15px; font-size: clamp(10px, 3vw, 12px); color: rgba(255,255,255,0.7); text-shadow: 0 2px 4px rgba(0,0,0,0.7); }
+    .footer__copy a { color: rgba(255,255,255,0.9); text-decoration: none; }
+    .footer__copy a:hover { color: white; }
+    audio { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="background-gif"></div>
+  <div class="intro-screen" id="introScreen">
+    <button class="intro-button" onclick="enterSite()">CLICK TO ENTER</button>
+  </div>
+  <audio id="backgroundAudio" loop>
+    <source src="music.mp3">
+  </audio>
+  <div class="container" id="mainContent">
+    <div class="avatar-container">
+      <img class="avatar" src="https://scontent.fsgn5-14.fna.fbcdn.net/v/t39.30808-6/493951992_1307531241378347_4574511916558124894_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=iHN6zWDJahMQ7kNvwHXPOJd&_nc_oc=AdnoCD33C7rn85U11GcqgeIqbDWXvMTAPeplL3nre1n_wWvN6OM6WQxlORzDi-PsYERwt_D9xg2RvpHU5qoJvMD9&_nc_zt=23&_nc_ht=scontent.fsgn5-14.fna&_nc_gid=YO_AtuG0P_3Fr0Maj-qKgQ&oh=00_AfINUehSHOPIkbn1iqpSNhP28rRB-iOmON3XQYswro8g4g&oe=6822EF2A" alt="Avatar"/>
+    </div>
+    <h1>NGUYEN QUOC CUONG</h1>
+    <p class="subtitle">Quoc Cuong aka Parys</p>
+    <div class="section-title">Contact</div>
+    <div class="grid-buttons">
+      <a class="button instagram" href="https://www.instagram.com/qcakaparys" target="_blank"><i class="fab fa-instagram"></i>Instagram</a>
+      <a class="button tiktok" href="https://www.tiktok.com/@parys4u" target="_blank"><i class="fab fa-tiktok"></i>TikTok</a>
+      <a class="button facebook" href="https://www.facebook.com/parysdasick" target="_blank"><i class="fab fa-facebook"></i>Facebook</a>
+      <a class="button github" href="https://github.com/qcakaparys" target="_blank"><i class="fab fa-github"></i>GitHub</a>
+    </div>
+    
+    <div class="section-title">Bio</div>
+    <div class="description-box">
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li><strong>99%</strong> copy and paste</li>
+      </ul>
+    </div>
+  </div>
+// 1% ask chat gpt
+  <script>
+    function enterSite() {
+      document.getElementById('introScreen').classList.add('hidden');
+      document.getElementById('mainContent').style.display = 'flex';
+      document.getElementById('backgroundAudio').play().catch(err => console.warn('Autoplay blocked', err));
+    }
+  </script>
+
+</body>
+</html>
